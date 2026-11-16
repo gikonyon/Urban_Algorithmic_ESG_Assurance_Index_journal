@@ -1,33 +1,44 @@
-# 🇰🇪 Kenya 2060 Strategic Policy Framework & Interactive Analytics
+# 📊 Urban Algorithmic ESG Assurance Index (UAEI)
 
-This repository hosts the **Kenya 2060 Development Framework** and interactive analytics dashboard built with Streamlit. It integrates devolved economic restructuring, regional value chains, and forensic ESG algorithmic verification for public-sector and corporate governance.
+This repository hosts the forensic verification toolkit and interactive analytics journal accompanying the academic manuscript: **"Algorithmic Urbanism and Sustainability Assurance: Evaluating Artificial Intelligence across Environment, Governance, and Social Inclusion in Nairobi’s Public Services"** (*East African Journal of Business and Economics*, Vol. 9, Issue 4, 2026).
 
 ---
 
-## 🚀 Key Modules & Features
+## 🌐 Live Interactive Application
 
-1. **Productive Capacity Devolution:** Reorganizing national policy from administrative consumption to devolved industrialization across 9 functional economic regions.
-2. **Urban Algorithmic ESG Assurance Index (UAEI):** A modular forensic auditing framework evaluating municipal AI deployments across three pillars:
-   - **Environment ($E_{score}$):** Telemetry ingestion automation, spatial-temporal anchoring, and compute/e-waste sustainability.
-   - **Governance ($AGIS$):** Model transparency, Data Protection Act (2019) compliance (DPIAs & anonymization), and Section 35 human-in-the-loop oversight.
-   - **Social Inclusion ($S_{inc}$):** Multimodal channel parity (USSD/SMS), linguistic inclusivity (Kiswahili/Sheng NLP), and informal ward equity.
-3. **Interactive Streamlit Dashboard (`journal_app.py`):** A live web interface allowing stakeholders to explore policy journals, regional partnerships, electoral risk analytics, and live UAEI assurance scoring.
+Access the deployed Streamlit web application directly in your browser:  
+👉 **[Launch UAEI Interactive Journal & Calculator](https://urbanalgorithmicesgassuranceindexjournal-hndwlkgcu3nyd6trmysxo.streamlit.app/)**
+
+---
+
+## 🔬 Framework Overview
+
+To bridge the **Assurance Gap** between smart-city sustainability narratives and verifiable outcomes in Nairobi, the **Urban Algorithmic ESG Assurance Index ($UAEI$)** evaluates public-sector AI deployments across three normalized pillars ($[0.00, 1.00]$):
+
+1. **Environment ($E_{score}$):**  
+   $$E_{score} = 0.40(M_r) + 0.30(G_t) + 0.30(R_e)$$  
+   Evaluates telemetry ingestion automation ($M_r$), spatial-temporal anchoring ($G_t$), and data center compute/e-waste sustainability ($R_e$).
+2. **Governance ($AGIS$):**  
+   $$AGIS = 0.35(T_a) + 0.35(D_p) + 0.30(H_o)$$  
+   Evaluates algorithmic transparency ($T_a$), compliance with Kenya's *Data Protection Act (2019)* via DPIAs and anonymization ($D_p$), and Section 35 human-in-the-loop oversight ($H_o$).
+3. **Social Inclusion ($S_{inc}$):**  
+   $$S_{inc} = 0.40(C_m) + 0.30(L_p) + 0.30(W_e)$$  
+   Evaluates USSD/SMS multimodal channel parity ($C_m$), Kiswahili/local NLP accessibility ($L_p$), and proportionate deployment across informal wards ($W_e$).
 
 ---
 
 ## 📁 Repository File Structure
 
-* `journal_app.py`: The core interactive Streamlit web application and journal log.
-* `uaei_verification.py`: Standalone Python module containing the forensic ESG verification functions and scoring calculators.
-* `proposal.md`: Full policy proposal document detailing regional economic zones, the 4-tier financing model, and governance frameworks.
-* `requirements.txt`: Python package dependencies (`streamlit`, `pandas`, `plotly`).
-* `.gitignore`: Clean-up configuration for unnecessary system files.
+* `journal_app.py`: Interactive Streamlit web application featuring the UAEI ESG Assurance Calculator and research journal logs.
+* `uaei_verification.py`: Standalone Python verification suite (`verify_environment`, `verify_governance`, `verify_social_inclusion`, and `evaluate_project_uaei`) with automated diagnostic audit flags.
+* `requirements.txt`: Python package dependencies (`streamlit`, `pandas`, `numpy`, `plotly`) for Streamlit Community Cloud deployment.
+* `README.md`: Repository documentation and live application link.
 
 ---
 
-## 🌐 Live Application
+## 🔭 Future Research Horizon
 
-Access the deployed Streamlit web application online via [Streamlit Community Cloud](https://share.streamlit.io).
+Subsequent iterations of this framework extend forensic verification to private-sector enterprises via a **County-Adjusted Corporate ESG Variance Model**—benchmarking corporate environmental and social metrics against localized county operating baselines rather than blunt national averages.
 
 ---
-*Prepared by Gikonyo Ndugu*
+*Author & Lead Researcher: Gikonyo Ndugu*
