@@ -2,27 +2,16 @@ import numpy as np
 import pandas as pd
 
 
-# ==============================================================================
-# MODULE 1: ENVIRONMENT VERIFICATION (E_score)
-# Evaluates telemetry ingestion maturity, spatial-temporal anchoring, and compute/e-waste
-# ==============================================================================
 def verify_environment(mr: float, gt: float, re: float) -> dict:
-    """Inputs normalized to [0.00, 1.00]:
-
-    - mr: Ingestion Automation (0.00 Manual -> 0.75 Live API -> 1.00 Immutable Log)
-    - gt: Spatial-Temporal Anchoring (Cryptographic timestamp + Ward GPS)
-    - re: Compute & E-Waste Sustainability (Renewable grid + EPR recycling)
-    """
+    """Pillar I: Environmental Telemetry and Net-Impact Score (E_score)."""
     e_score = 0.40 * mr + 0.30 * gt + 0.30 * re
     flags = []
-
     if mr < 0.50:
         flags.append("Ingestion Risk: Manual/batch uploads lack real-time auditability.")
     if gt < 0.75:
-        flags.append("Telemetry Risk: Missing cryptographic timestamps or ward GPS anchors.")
+        flags.append("Telemetry Risk: Missing cryptographic timestamps or ward-level location.")
     if re < 0.50:
-        flags.append("Externality Risk: Unverified renewable power or e-waste recovery.")
-
+        flags.append("Externality Risk: Uncertified or undisclosed compute and e-waste handling.")
     return {
         "E_score": round(e_score, 4),
         "status": "Verified" if (e_score >= 0.75 and not flags) else "Needs Remediation",
@@ -30,27 +19,16 @@ def verify_environment(mr: float, gt: float, re: float) -> dict:
     }
 
 
-# ==============================================================================
-# MODULE 2: GOVERNANCE VERIFICATION (AGIS)
-# Evaluates transparency, Data Protection Act (2019) compliance, and human oversight
-# ==============================================================================
 def verify_governance(ta: float, dp: float, ho: float) -> dict:
-    """Inputs normalized to [0.00, 1.00]:
-
-    - ta: Transparency & Auditability (Public model cards, open logs)
-    - dp: Data Protection & Sovereignty (DPIA Reg. 49, PII anonymization)
-    - ho: Human-in-the-Loop Oversight (Sec. 35 officer override & redress)
-    """
+    """Pillar II: Algorithmic Governance Integrity Score (AGIS)."""
     agis = 0.35 * ta + 0.35 * dp + 0.30 * ho
     flags = []
-
     if dp < 0.75:
-        flags.append("DPA Risk: Incomplete DPIA (Reg. 49) or un-anonymized citizen PII.")
+        flags.append("DPA Risk: Incomplete DPIA (Sec. 31 / Reg. 49) or missing vendor processing agreement.")
     if ho < 0.75:
-        flags.append("Sec. 35 Risk: Insufficient human-in-the-loop override or citizen redress.")
+        flags.append("Section 35 Risk: Lacks named officer override and documented citizen appeal route.")
     if ta < 0.50:
-        flags.append("Opacity Risk: Missing public model documentation or audit trail.")
-
+        flags.append("Opacity Risk: Incomplete public model documentation or retained logs.")
     return {
         "AGIS": round(agis, 4),
         "status": "Compliant" if (agis >= 0.75 and not flags) else "Governance Gap",
@@ -58,27 +36,16 @@ def verify_governance(ta: float, dp: float, ho: float) -> dict:
     }
 
 
-# ==============================================================================
-# MODULE 3: SOCIAL INCLUSION VERIFICATION (S_inc)
-# Evaluates offline channel parity, Kiswahili/local NLP, and informal ward equity
-# ==============================================================================
 def verify_social_inclusion(cm: float, lp: float, we: float) -> dict:
-    """Inputs normalized to [0.00, 1.00]:
-
-    - cm: Channel Multimodality (USSD *xxx#, SMS, and physical desk parity)
-    - lp: Linguistic Parity (Kiswahili & local vernacular NLP support)
-    - we: Ward-Level Equity Allocation (Deployment in informal settlements)
-    """
+    """Pillar III: Social Inclusion and Public Access Parity Score (S_inc)."""
     s_inc = 0.40 * cm + 0.30 * lp + 0.30 * we
     flags = []
-
     if cm < 0.75:
-        flags.append("Access Risk: Lacks USSD/SMS or physical desk parity for offline residents.")
+        flags.append("Access Risk: Lacks USSD, SMS, or physical service-desk parity.")
     if lp < 0.70:
-        flags.append("Linguistic Risk: Insufficient Kiswahili/local language NLP support.")
+        flags.append("Linguistic Risk: Insufficient Kiswahili/local language support.")
     if we < 0.60:
-        flags.append("Equity Risk: Under-allocated across high-density informal wards.")
-
+        flags.append("Equity Risk: Uneven deployment across informal settlements and peri-urban wards.")
     return {
         "S_inc": round(s_inc, 4),
         "status": "Inclusive" if (s_inc >= 0.75 and not flags) else "Access Deficit",
@@ -86,38 +53,53 @@ def verify_social_inclusion(cm: float, lp: float, we: float) -> dict:
     }
 
 
-# ==============================================================================
-# MODULE 4: COMPOSITE UAEI AGGREGATOR
-# ==============================================================================
 def evaluate_project_uaei(
     project_name: str,
     env_inputs: tuple,
     gov_inputs: tuple,
     soc_inputs: tuple,
+    affects_individuals: bool = True,
 ) -> dict:
+    """Computes composite UAEI and applies Section 3.4 minimum-threshold gating rules."""
     env_res = verify_environment(*env_inputs)
     gov_res = verify_governance(*gov_inputs)
     soc_res = verify_social_inclusion(*soc_inputs)
 
-    uaei = (env_res["E_score"] + gov_res["AGIS"] + soc_res["S_inc"]) / 3.0
+    e_score = env_res["E_score"]
+    agis = gov_res["AGIS"]
+    s_inc = soc_res["S_inc"]
+    ho = gov_inputs[2]
 
-    if uaei >= 0.80:
-        tier = "Alpha Assurance (Verified Sustainable Infrastructure)"
+    uaei = (e_score + agis + s_inc) / 3.0
+    gate_notes = []
+
+    # Gate 1: Legal floor (Section 35 human-in-the-loop requirement)
+    if affects_individuals and ho == 0.0:
+        tier = "Charlie (Capped by Legal Floor: H_o = 0.00 violates Section 35)"
+        gate_notes.append("Legal Floor Triggered: Autonomous decision-making without human oversight (H_o = 0.00).")
+    # Gate 2 & 3: Alpha conditions vs. Bravo cap
+    elif uaei >= 0.80:
+        if agis >= 0.70 and min(e_score, agis, s_inc) >= 0.60:
+            tier = "Alpha (Verified Sustainable Public Infrastructure)"
+        else:
+            tier = "Bravo (Capped from Alpha: Failed Pillar Gate Thresholds)"
+            gate_notes.append("Bravo Cap Triggered: Alpha requires AGIS >= 0.70 and all sub-indices >= 0.60.")
     elif uaei >= 0.50:
-        tier = "Bravo Assurance (Transitional / Conditionally Compliant)"
+        tier = "Bravo (Transitional, Conditionally Compliant)"
     else:
-        tier = "Charlie Assurance (Unverified / High Risk)"
+        tier = "Charlie (Unverified or High-Risk)"
 
     return {
         "Project": project_name,
-        "E_score": env_res["E_score"],
+        "E_score": round(e_score, 4),
         "Env_Status": env_res["status"],
-        "AGIS": gov_res["AGIS"],
+        "AGIS": round(agis, 4),
         "Gov_Status": gov_res["status"],
-        "S_inc": soc_res["S_inc"],
+        "S_inc": round(s_inc, 4),
         "Soc_Status": soc_res["status"],
         "UAEI": round(uaei, 4),
         "Assurance_Tier": tier,
+        "Gate_Notes": gate_notes,
         "Diagnostic_Flags": (
             env_res["audit_flags"] + gov_res["audit_flags"] + soc_res["audit_flags"]
         ),
@@ -125,10 +107,18 @@ def evaluate_project_uaei(
 
 
 if __name__ == "__main__":
-    sample_eval = evaluate_project_uaei(
-        project_name="Nairobi Corridor Air-Transit AI",
-        env_inputs=(0.85, 0.80, 0.65),
-        gov_inputs=(0.75, 0.90, 0.80),
-        soc_inputs=(0.80, 0.75, 0.70),
+    # Illustrative Worked Example from Section 5 (Hypothetical Data)
+    scenario_a = evaluate_project_uaei(
+        project_name="Scenario A: Permit Assistant (Initial Deployment - Hypothetical)",
+        env_inputs=(0.75, 0.50, 0.25),
+        gov_inputs=(0.50, 0.50, 0.25),
+        soc_inputs=(0.25, 0.25, 0.50),
     )
-    print(pd.DataFrame([sample_eval]).to_string())
+    scenario_b = evaluate_project_uaei(
+        project_name="Scenario B: Permit Assistant (After Sequenced Reforms - Hypothetical)",
+        env_inputs=(0.75, 0.75, 0.50),
+        gov_inputs=(0.75, 0.75, 1.00),
+        soc_inputs=(0.75, 0.50, 0.50),
+    )
+    df = pd.DataFrame([scenario_a, scenario_b])
+    print(df[["Project", "E_score", "AGIS", "S_inc", "UAEI", "Assurance_Tier"]].to_string(index=False))
